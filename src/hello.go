@@ -4,7 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 )
+
+const monitoringTimes = 5
+const delay = 3
 
 func main() {
 	handleIntro()
@@ -40,8 +44,22 @@ func readCommand() int {
 func monitoringSite() {
 	fmt.Println("Monitorando...")
 
-	site := "http://www.google.com.br"
+	sites := []string{"http://www.google.com.br", "https://golang.org/", "https://github.com/"}
 
+	i := 0
+	for {
+		i++
+		fmt.Println("MONITORAMENTO #", i)
+		for j, site := range sites {
+			fmt.Println("Monitoramento Núm.", j+1, ":", site)
+			handleMonitoring(site)
+			fmt.Println("")
+		}
+		time.Sleep(delay * time.Second)
+	}
+}
+
+func handleMonitoring(site string) {
 	resp, _ := http.Get(site)
 	statusCode := resp.StatusCode
 
